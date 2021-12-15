@@ -116,7 +116,7 @@ export default {
         type: "warning",
       })
         .then(() => {
-          teacher.delTeacher(id).then((response) => {
+          employee.delEmployee(id).then((response) => {
             //删除成功
             console.log("删除成功");
             this.$message({
@@ -124,7 +124,7 @@ export default {
               message: "删除成功!",
             });
             //刷新表格
-            this.getTeacherPageQuery();
+            this.getEmployeePage();
           });
         })
         .catch(() => {

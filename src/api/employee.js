@@ -31,5 +31,12 @@ export default {
             method: 'post',
             data: employee
           })
+    },
+
+    delEmployee(id){
+        return request({
+            url: `/sql/employee/${id}`,
+            method: 'delete'
+          })
     }
 }
