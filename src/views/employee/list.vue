@@ -9,7 +9,9 @@
       <el-form-item>
         <el-input v-model="employeeQuery.name" placeholder="员工名" />
       </el-form-item>
-
+      <el-form-item>
+        <el-input v-model="employeeQuery.tell" placeholder="电话" />
+      </el-form-item>
       <el-form-item>
         <el-input v-model="employeeQuery.address" placeholder="员工住址" />
       </el-form-item>
@@ -18,10 +20,7 @@
         <el-input v-model="employeeQuery.shopId" placeholder="员工所属车间" />
       </el-form-item>
 
-      <el-button
-        type="primary"
-        icon="el-icon-search"
-        @click="getTeacherPageQuery()"
+      <el-button type="primary" icon="el-icon-search" @click="getEmployeePage()"
         >查询</el-button
       >
       <el-button type="default" @click="resetData()">清空</el-button>
@@ -42,13 +41,12 @@
         }}</template>
       </el-table-column>
 
-      <el-table-column prop="id" label="id" width="80" />
+      <el-table-column prop="id" label="id" width="110" />
 
       <el-table-column prop="name" label="名称" width="100" />
+      <el-table-column prop="tell" label="电话" width="160" />
       <el-table-column prop="address" label="住址" />
       <el-table-column prop="shopId" label="所属车间" width="100" />
-
-      <el-table-column prop="sort" label="排序" width="60" />
 
       <el-table-column label="操作" width="200" align="center">
         <template slot-scope="scope">
@@ -74,7 +72,7 @@
       :total="total"
       style="padding: 30px 0; text-align: center"
       layout="total, prev, pager, next, jumper"
-      @current-change="getTeacherPageQuery"
+      @current-change="getEmployeePage"
     />
   </div>
 </template>
@@ -108,11 +106,11 @@ export default {
     //清空
     resetData() {
       this.employeeQuery = {};
-      this.getTeacherPageQuery();
+      this.getEmployeePage();
     },
-    //删除讲师
+    //删除员工
     removeDataById(id) {
-      this.$confirm("此操作将永久删除该讲师, 是否继续?", "提示", {
+      this.$confirm("此操作将永久删除该员工, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
