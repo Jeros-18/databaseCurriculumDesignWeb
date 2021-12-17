@@ -1,25 +1,22 @@
 <template>
   <div class="app-container">
-    仓库列表
+    车间列表
     <!--查询表单-->
     <el-form :inline="true" class="demo-form-inline">
       <el-form-item>
-        <el-input v-model="StoreQuery.id" placeholder="仓库id" />
-      </el-form-item>
-      <!-- <el-form-item>
-        <el-input v-model="StoreQuery.sizeMin" placeholder="仓库大小下限" />
+        <el-input v-model="shopQuery.id" placeholder="车间id" />
       </el-form-item>
       <el-form-item>
-        <el-input v-model="StoreQuery.sizeMax" placeholder="仓库大小上限" />
-      </el-form-item> -->
-      <el-form-item>
-        <el-input v-model="StoreQuery.storeAdmin" placeholder="仓库管理员id" />
+        <el-input v-model="shopQuery.address" placeholder="车间地址" />
       </el-form-item>
       <el-form-item>
-        <el-input v-model="StoreQuery.note" placeholder="备注" />
+        <el-input v-model="shopQuery.shopAdmin" placeholder="车间管理员id" />
+      </el-form-item>
+      <el-form-item>
+        <el-input v-model="shopQuery.note" placeholder="备注" />
       </el-form-item>
 
-      <el-button type="primary" icon="el-icon-search" @click="getstorePage()"
+      <el-button type="primary" icon="el-icon-search" @click="getshopPage()"
         >查询</el-button
       >
       <el-button type="default" @click="resetData()">清空</el-button>
@@ -40,15 +37,14 @@
         }}</template>
       </el-table-column>
 
-      <el-table-column prop="id" label="id" width="110" />
-
-      <el-table-column prop="size" label="仓库占地面积" width="150" />
-      <el-table-column prop="storeAdmin" label="仓库管理员Id" width="160" />
+      <el-table-column prop="id" label="车间id" width="110" />>
+      <el-table-column prop="address" label="车间地址" width="150" />
+      <el-table-column prop="shopAdmin" label="车间管理员Id" width="160" />
       <el-table-column prop="note" label="备注" />
 
       <el-table-column label="操作" width="200" align="center">
         <template slot-scope="scope">
-          <router-link :to="'/store/add/' + scope.row.id">
+          <router-link :to="'/shop/add/' + scope.row.id">
             <el-button type="primary" size="mini" icon="el-icon-edit"
               >修改</el-button
             >
@@ -70,33 +66,31 @@
       :total="total"
       style="padding: 30px 0; text-align: center"
       layout="total, prev, pager, next, jumper"
-      @current-change="getstorePage"
+      @current-change="getshopPage"
     />
   </div>
 </template>
 <script>
-import store from "@/api/store";
+import shop from "@/api/shop";
 
 export default {
   data() {
     return {
       current: 1, //页码
       limit: 10, //每页多少行
-      StoreQuery: {}, //查询条件
+      shopQuery: {}, //查询条件
       list: [], //列表数据
-      total: 0, //总记录数
-      sizeMin: 0,
-      sizeMax: 10000
+      total: 0 //总记录数
     };
   },
   created() {
-    this.getstorePage();
+    this.getshopPage();
   },
   methods: {
-    getstorePage(current = 1) {
+    getshopPage(current = 1) {
       this.current = current;
-      store
-        .getstorePageVo(this.current, this.limit, this.StoreQuery)
+      shop
+        .getshopPageVo(this.current, this.limit, this.shopQuery)
         .then((response) => {
           console.log(response);
           this.list = response.data.list;
@@ -105,18 +99,18 @@ export default {
     },
     //清空
     resetData() {
-      this.StoreQuery = {};
-      this.getstorePage();
+      this.shopQuery = {};
+      this.getshopPage();
     },
-    //删除仓库
+    //删除车间
     removeDataById(id) {
-      this.$confirm("此操作将永久删除该仓库, 是否继续?", "提示", {
+      this.$confirm("此操作将永久删除该车间, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
       })
         .then(() => {
-          store.delstore(id).then((response) => {
+          shop.deleShop(id).then((response) => {
             //删除成功
             console.log("删除成功");
             this.$message({
@@ -124,7 +118,7 @@ export default {
               message: "删除成功!",
             });
             //刷新表格
-            this.getstorePage();
+            this.getshopPage();
           });
         })
         .catch(() => {
