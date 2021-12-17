@@ -1,15 +1,19 @@
 <template>
   <div class="app-container">
     <el-form label-width="120px">
-      <el-form-item label="仓库占地面积">
-        <el-input v-model="store.size" />
+      <el-form-item label="工厂名称">
+        <el-input v-model="factory.faName" />
       </el-form-item>
-      <el-form-item label="仓库管理员id">
-        <el-input v-model="store.storeAdmin" />
+      <el-form-item label="厂长名">
+        <el-input v-model="factory.dirName" />
       </el-form-item>
+       <el-form-item label="厂长电话">
+        <el-input v-model="factory.dirTell" />
+      </el-form-item>
+       
       
-      <el-form-item label="备注">
-        <el-input v-model="store.note" :rows="10" type="textarea" />
+      <el-form-item label="工厂地址">
+        <el-input v-model="factory.faAddress" :rows="10" type="textarea" />
       </el-form-item>
 
 
@@ -25,13 +29,13 @@
   </div>
 </template>
 <script>
-import store from "@/api/store";
+import factory from "@/api/factory";
 
 export default {
 
   data() {
     return {
-      store: {}, //表单数据
+      factory: {}, //表单数据
       saveBtnDisabled: false, //按钮是否不可操作
 
     };
@@ -50,27 +54,27 @@ export default {
     init() {
       if (this.$route.params && this.$route.params.id) {
         console.log("$route.params.id=" + this.$route.params.id);
-        store.getStoreById(this.$route.params.id).then((response) => {
-          this.store = response.data.store;
+        factory.getfactoryById(this.$route.params.id).then((response) => {
+          this.factory = response.data.factory;
         });
       } else {
         console.log("清空数据！！！！！");
-        this.store = {};
+        this.factory = {};
       }
     },
 
     saveOrUpdate() {
-      if (this.store.id) {
+      if (this.factory.id) {
         //id存在、执行修改
-        this.updatestoreInfo();
+        this.updatefactoryInfo();
       } else {
         //id不存在、执行添加
-        this.savestore();
+        this.savefactory();
       }
     },
-    //添加仓库
-    savestore() {
-      store.addStore(this.store).then((response) => {
+    //添加工厂
+    savefactory() {
+      factory.addfactory(this.factory).then((response) => {
         //提示成功
         this.$message({
           type: "success",
@@ -78,12 +82,12 @@ export default {
         });
 
         //路由跳转
-        this.$router.push({ path: "/store/list" });
+        this.$router.push({ path: "/factory/list" });
       });
     },
-    //修改仓库
-    updatestoreInfo() {
-      store.updateStore(this.store).then((response) => {
+    //修改工厂
+    updatefactoryInfo() {
+      factory.updatefactory(this.factory).then((response) => {
         //提示成功
         this.$message({
           type: "success",
@@ -91,7 +95,7 @@ export default {
         });
 
         //路由跳转
-        this.$router.push({ path: "/store/list" });
+        this.$router.push({ path: "/factory/list" });
       });
     }
 

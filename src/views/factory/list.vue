@@ -1,25 +1,25 @@
 <template>
   <div class="app-container">
-    仓库列表
+    工厂列表
     <!--查询表单-->
     <el-form :inline="true" class="demo-form-inline">
       <el-form-item>
-        <el-input v-model="StoreQuery.id" placeholder="仓库id" />
+        <el-input v-model="factoryQuery.id" placeholder="工厂id" />
       </el-form-item>
-      <!-- <el-form-item>
-        <el-input v-model="StoreQuery.sizeMin" placeholder="仓库大小下限" />
-      </el-form-item>
-      <el-form-item>
-        <el-input v-model="StoreQuery.sizeMax" placeholder="仓库大小上限" />
-      </el-form-item> -->
-      <el-form-item>
-        <el-input v-model="StoreQuery.storeAdmin" placeholder="仓库管理员id" />
+    <el-form-item>
+        <el-input v-model="factoryQuery.faName" placeholder="工厂名" />
       </el-form-item>
       <el-form-item>
-        <el-input v-model="StoreQuery.note" placeholder="备注" />
+        <el-input v-model="factoryQuery.dirName" placeholder="厂长名" />
+      </el-form-item>
+      <el-form-item>
+        <el-input v-model="factoryQuery.dirTell" placeholder="厂长电话" />
+      </el-form-item>
+      <el-form-item>
+        <el-input v-model="factoryQuery.faAddress" placeholder="地址" />
       </el-form-item>
 
-      <el-button type="primary" icon="el-icon-search" @click="getstorePage()"
+      <el-button type="primary" icon="el-icon-search" @click="getfactoryPage()"
         >查询</el-button
       >
       <el-button type="default" @click="resetData()">清空</el-button>
@@ -40,15 +40,16 @@
         }}</template>
       </el-table-column>
 
-      <el-table-column prop="id" label="id" width="110" />
+      <el-table-column prop="id" label="工厂id" width="110" />
 
-      <el-table-column prop="size" label="仓库占地面积" width="150" />
-      <el-table-column prop="storeAdmin" label="仓库管理员Id" width="160" />
-      <el-table-column prop="note" label="备注" />
+      <el-table-column prop="faName" label="工厂名" width="150" />
+      <el-table-column prop="dirName" label="厂长名" width="160" />
+      <el-table-column prop="dirTell" label="厂长电话" width="180"/>
+      <el-table-column prop="faAddress" label="工厂地址"/>
 
       <el-table-column label="操作" width="200" align="center">
         <template slot-scope="scope">
-          <router-link :to="'/store/add/' + scope.row.id">
+          <router-link :to="'/factory/add/' + scope.row.id">
             <el-button type="primary" size="mini" icon="el-icon-edit"
               >修改</el-button
             >
@@ -70,19 +71,19 @@
       :total="total"
       style="padding: 30px 0; text-align: center"
       layout="total, prev, pager, next, jumper"
-      @current-change="getstorePage"
+      @current-change="getfactoryPage"
     />
   </div>
 </template>
 <script>
-import store from "@/api/store";
+import factory from "@/api/factory";
 
 export default {
   data() {
     return {
       current: 1, //页码
       limit: 10, //每页多少行
-      StoreQuery: {}, //查询条件
+      factoryQuery: {}, //查询条件
       list: [], //列表数据
       total: 0, //总记录数
       sizeMin: 0,
@@ -90,13 +91,13 @@ export default {
     };
   },
   created() {
-    this.getstorePage();
+    this.getfactoryPage();
   },
   methods: {
-    getstorePage(current = 1) {
+    getfactoryPage(current = 1) {
       this.current = current;
-      store
-        .getstorePageVo(this.current, this.limit, this.StoreQuery)
+      factory
+        .getfactoryPageVo(this.current, this.limit, this.factoryQuery)
         .then((response) => {
           console.log(response);
           this.list = response.data.list;
@@ -105,18 +106,18 @@ export default {
     },
     //清空
     resetData() {
-      this.StoreQuery = {};
-      this.getstorePage();
+      this.factoryQuery = {};
+      this.getfactoryPage();
     },
-    //删除仓库
+    //删除工厂
     removeDataById(id) {
-      this.$confirm("此操作将永久删除该仓库, 是否继续?", "提示", {
+      this.$confirm("此操作将永久删除该工厂, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
       })
         .then(() => {
-          store.delstore(id).then((response) => {
+          factory.delfactory(id).then((response) => {
             //删除成功
             console.log("删除成功");
             this.$message({
@@ -124,7 +125,7 @@ export default {
               message: "删除成功!",
             });
             //刷新表格
-            this.getstorePage();
+            this.getfactoryPage();
           });
         })
         .catch(() => {
