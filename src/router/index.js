@@ -89,6 +89,35 @@ export const constantRouterMap = [
   },
 
   {
+    path: '/store',
+    component: Layout,
+    redirect: '/example/table',
+    name: '仓库管理',
+    meta: { title: '仓库管理', icon: 'example' },
+    children: [
+      {
+        path: 'list',
+        name: '仓库列表',
+        component: () => import('@/views/store/list'),
+        meta: { title: '仓库列表', icon: 'table' }
+      },
+      {
+        path: 'add',
+        name: '添加仓库',
+        component: () => import('@/views/store/add'),
+        meta: { title: '添加仓库', icon: 'tree' }
+      },
+      {
+        path: 'add/:id',
+        name: 'StoreEdit',
+        component: () => import('@/views/store/add'),
+        meta: { title: '编辑仓库', noCache: true },
+        hidden: true
+      }
+    ]
+  },
+
+  {
     path: '/teacher',
     component: Layout,
     redirect: '/example/table',
