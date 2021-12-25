@@ -1,15 +1,15 @@
 <template>
   <div class="app-container">
     <el-form label-width="120px">
-      <el-form-item label="仓库占地面积">
-        <el-input v-model="store.size" />
+      <el-form-item label="仓库管理员姓名">
+        <el-input v-model="storeAdmin.name" />
       </el-form-item>
-      <el-form-item label="仓库管理员id">
-        <el-input v-model="store.storeAdmin" />
+      <el-form-item label="仓库管理员电话">
+        <el-input v-model="storeAdmin.tell" />
       </el-form-item>
       
-      <el-form-item label="备注">
-        <el-input v-model="store.note" :rows="10" type="textarea" />
+      <el-form-item label="所管仓库">
+        <el-input v-model="storeAdmin.storeId"/>
       </el-form-item>
 
 
@@ -25,13 +25,13 @@
   </div>
 </template>
 <script>
-import store from "@/api/store";
+import storeAdmin from "@/api/storeAdmin";
 
 export default {
 
   data() {
     return {
-      store: {}, //表单数据
+      storeAdmin: {}, //表单数据
       saveBtnDisabled: false, //按钮是否不可操作
 
     };
@@ -50,27 +50,27 @@ export default {
     init() {
       if (this.$route.params && this.$route.params.id) {
         console.log("$route.params.id=" + this.$route.params.id);
-        store.getStoreById(this.$route.params.id).then((response) => {
-          this.store = response.data.store;
+        storeAdmin.getstoreAdminById(this.$route.params.id).then((response) => {
+          this.storeAdmin = response.data.storeAdmin;
         });
       } else {
         console.log("清空数据！！！！！");
-        this.store = {};
+        this.storeAdmin = {};
       }
     },
 
     saveOrUpdate() {
-      if (this.store.id) {
+      if (this.storeAdmin.id) {
         //id存在、执行修改
-        this.updatestoreInfo();
+        this.updatestoreAdminInfo();
       } else {
         //id不存在、执行添加
-        this.savestore();
+        this.savestoreAdmin();
       }
     },
-    //添加仓库
-    savestore() {
-      store.addStore(this.store).then((response) => {
+    //添加仓库管理员
+    savestoreAdmin() {
+      storeAdmin.addstoreAdmin(this.storeAdmin).then((response) => {
         //提示成功
         this.$message({
           type: "success",
@@ -78,12 +78,12 @@ export default {
         });
 
         //路由跳转
-        this.$router.push({ path: "/store/list" });
+        this.$router.push({ path: "/storeAdmin/list" });
       });
     },
-    //修改仓库
-    updatestoreInfo() {
-      store.updateStore(this.store).then((response) => {
+    //修改仓库管理员
+    updatestoreAdminInfo() {
+      storeAdmin.updatestoreAdmin(this.storeAdmin).then((response) => {
         //提示成功
         this.$message({
           type: "success",
@@ -91,7 +91,7 @@ export default {
         });
 
         //路由跳转
-        this.$router.push({ path: "/store/list" });
+        this.$router.push({ path: "/storeAdmin/list" });
       });
     }
 

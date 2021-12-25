@@ -174,7 +174,7 @@ export const constantRouterMap = [
       {
         path: 'add/:id',
         name: 'StoreEdit',
-        component: () => import('@/views/store/add'),
+        component: () => import('@/views/storeAdmin/add'),
         meta: { title: '编辑仓库', noCache: true },
         hidden: true
       }

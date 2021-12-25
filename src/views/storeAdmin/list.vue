@@ -1,25 +1,23 @@
 <template>
   <div class="app-container">
-    仓库列表
+    仓库管理员列表
     <!--查询表单-->
     <el-form :inline="true" class="demo-form-inline">
       <el-form-item>
-        <el-input v-model="StoreQuery.id" placeholder="仓库id" />
+        <el-input v-model="storeAdminQuery.id" placeholder="仓库管理员id" />
       </el-form-item>
-      <!-- <el-form-item>
-        <el-input v-model="StoreQuery.sizeMin" placeholder="仓库大小下限" />
-      </el-form-item>
+    
       <el-form-item>
-        <el-input v-model="StoreQuery.sizeMax" placeholder="仓库大小上限" />
-      </el-form-item> -->
-      <el-form-item>
-        <el-input v-model="StoreQuery.storeAdmin" placeholder="仓库管理员id" />
+        <el-input v-model="storeAdminQuery.name" placeholder="仓库管理员姓名" />
       </el-form-item>
       <el-form-item>
-        <el-input v-model="StoreQuery.note" placeholder="备注" />
+        <el-input v-model="storeAdminQuery.tell" placeholder="仓库管理员姓名电话" />
+      </el-form-item>
+      <el-form-item>
+        <el-input v-model="storeAdminQuery.storeId" placeholder="所管仓库id" />
       </el-form-item>
 
-      <el-button type="primary" icon="el-icon-search" @click="getstorePage()"
+      <el-button type="primary" icon="el-icon-search" @click="getstoreAdminPage()"
         >查询</el-button
       >
       <el-button type="default" @click="resetData()">清空</el-button>
@@ -40,15 +38,15 @@
         }}</template>
       </el-table-column>
 
-      <el-table-column prop="id" label="id" width="110" />
+      <el-table-column prop="id" label="仓库管理员id" width="160" />
 
-      <el-table-column prop="size" label="仓库占地面积" width="150" />
-      <el-table-column prop="storeAdmin" label="仓库管理员Id" width="160" />
-      <el-table-column prop="note" label="备注" />
+      <el-table-column prop="name" label="仓库管理员姓名" width="150" />
+      <el-table-column prop="tell" label="仓库管理员电话" width="160" />
+      <el-table-column prop="storeId" label="所管仓库id" />
 
       <el-table-column label="操作" width="200" align="center">
         <template slot-scope="scope">
-          <router-link :to="'/store/add/' + scope.row.id">
+          <router-link :to="'/storeAdmin/add/' + scope.row.id">
             <el-button type="primary" size="mini" icon="el-icon-edit"
               >修改</el-button
             >
@@ -70,19 +68,19 @@
       :total="total"
       style="padding: 30px 0; text-align: center"
       layout="total, prev, pager, next, jumper"
-      @current-change="getstorePage"
+      @current-change="getstoreAdminPage"
     />
   </div>
 </template>
 <script>
-import store from "@/api/store";
+import storeAdmin from "@/api/storeAdmin";
 
 export default {
   data() {
     return {
       current: 1, //页码
       limit: 10, //每页多少行
-      StoreQuery: {}, //查询条件
+      storeAdminQuery: {}, //查询条件
       list: [], //列表数据
       total: 0, //总记录数
       sizeMin: 0,
@@ -90,13 +88,13 @@ export default {
     };
   },
   created() {
-    this.getstorePage();
+    this.getstoreAdminPage();
   },
   methods: {
-    getstorePage(current = 1) {
+    getstoreAdminPage(current = 1) {
       this.current = current;
-      store
-        .getstorePageVo(this.current, this.limit, this.StoreQuery)
+      storeAdmin
+        .getstoreAdminPageVo(this.current, this.limit, this.storeAdminQuery)
         .then((response) => {
           console.log(response);
           this.list = response.data.list;
@@ -105,18 +103,18 @@ export default {
     },
     //清空
     resetData() {
-      this.StoreQuery = {};
-      this.getstorePage();
+      this.storeAdminQuery = {};
+      this.getstoreAdminPage();
     },
-    //删除仓库
+    //删除仓库管理员
     removeDataById(id) {
-      this.$confirm("此操作将永久删除该仓库, 是否继续?", "提示", {
+      this.$confirm("此操作将永久删除该仓库管理员, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
       })
         .then(() => {
-          store.delstore(id).then((response) => {
+          storeAdmin.delstoreAdmin(id).then((response) => {
             //删除成功
             console.log("删除成功");
             this.$message({
@@ -124,7 +122,7 @@ export default {
               message: "删除成功!",
             });
             //刷新表格
-            this.getstorePage();
+            this.getstoreAdminPage();
           });
         })
         .catch(() => {
