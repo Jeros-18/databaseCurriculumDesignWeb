@@ -125,6 +125,35 @@ export const constantRouterMap = [
   },
 
   {
+    path: '/production',
+    component: Layout,
+    redirect: '/example/table',
+    name: '产品管理',
+    meta: { title: '产品管理', icon: 'form' },
+    children: [
+      {
+        path: 'list',
+        name: '产品列表',
+        component: () => import('@/views/production/list'),
+        meta: { title: '产品列表', icon: 'table' }
+      },
+      {
+        path: 'add',
+        name: '添加产品',
+        component: () => import('@/views/production/add'),
+        meta: { title: '添加产品', icon: 'tree' }
+      },
+      {
+        path: 'add/:id',
+        name: 'productionEdit',
+        component: () => import('@/views/production/add'),
+        meta: { title: '编辑仓库', noCache: true },
+        hidden: true
+      }
+    ]
+  },
+
+  {
     path: '/factory',
     component: Layout,
     redirect: '/example/table',
