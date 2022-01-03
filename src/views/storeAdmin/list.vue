@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    仓库管理员列表
+   
     <!--查询表单-->
     <el-form :inline="true" class="demo-form-inline">
       <el-form-item>
